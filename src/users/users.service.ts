@@ -32,10 +32,17 @@ export class UsersService {
   remove(id: string) {
     return `This action removes a #${id} user`;
   }
-  async login(loginUserDto: LoginUserDto) {
+  async login() {
+    console.log('login');
+  }
+
+  async validateUser(loginUserDto: LoginUserDto): Promise<any> {
     const user = await this.findOneByUsername(loginUserDto.username);
-    await this.checkPassword(loginUserDto.password, user);
-    // sent jwt
+    const match = await this.checkPassword(loginUserDto.password, user);
+    if (user && match) {
+      return user;
+    }
+    return null;
   }
 
   /**
@@ -44,9 +51,9 @@ export class UsersService {
    */
   private async findOneByUsername(username: string): Promise<User> {
     const user = await this.userModel.findOne({ username });
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
+    // if (!user) {
+    //   throw new UnauthorizedException('Invalid credentials');
+    // }
     return user;
   }
   /**
@@ -56,9 +63,9 @@ export class UsersService {
    */
   private async checkPassword(password: string, user: User): Promise<User> {
     const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
+    // if (!match) {
+    //   throw new UnauthorizedException('Invalid credentials');
+    // }
     return match;
   }
 }

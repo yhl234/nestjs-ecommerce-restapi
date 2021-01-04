@@ -13,7 +13,7 @@ config();
     MongooseModule.forRoot(process.env.MONGODB_CONNECTION_STRING),
     ProductsModule,
     CartsModule,
-    UsersModule,
+    // UsersModule,
     AuthModule,
   ],
   controllers: [AppController],

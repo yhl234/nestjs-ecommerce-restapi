@@ -7,13 +7,24 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { LoginUserDto } from 'src/users/dto/login-user.dto';
+import { User } from 'src/users/interfaces/user.interface';
+import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private userService: UsersService,
+  ) {}
+
+  @Post()
+  login(@Body() loginUserDto: LoginUserDto): Promise<User> {
+    return this.userService.validateUser(loginUserDto);
+  }
 
   // @Post()
   // create(@Body() createAuthDto: CreateAuthDto) {
